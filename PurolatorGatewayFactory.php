@@ -3,7 +3,6 @@
 namespace Omnibus\Purolator;
 
 use Omnibus\Config;
-use Omnibus\Exception\InvalidConfigException;
 use Omnibus\GatewayFactory;
 use Omnibus\Purolator\Action\CancelAction;
 use Omnibus\Purolator\Action\PickupAction;
@@ -30,7 +29,7 @@ final class PurolatorGatewayFactory extends GatewayFactory
             'omnibus.required_options' => ['key', 'password', 'account_number'],
             'sandbox' => false,
             'omnibus.api' => function (Config $c) {
-                $http = $this->http ?? (class_exists(HttpClient::class) ? HttpClient::create() : throw new InvalidConfigException('The "purolator" gateway needs symfony/http-client.'));
+                $http = $this->http ?? HttpClient::create();
 
                 return new Api($http, (string) $c['key'], (string) $c['password'], (string) $c['account_number'], (bool) $c['sandbox']);
             },
